@@ -1,11 +1,11 @@
-module.exports = (db) => {
+module.exports = () => {
   const express = require('express');
-  const bodyParser = require('body-parser');
   const cors = require('cors');
   const helmet = require('helmet');
   const morgan = require('morgan');
+  const DataBaseApi = require('./services/DatabaseApi')(process.env.DATABASE_API_URL);
 
-  const roomRoutes = require('./routes/roomRoutes')(db);
+  const roomRoutes = require('./room/roomRoutes')(DataBaseApi);
 
   const app = express();
 
