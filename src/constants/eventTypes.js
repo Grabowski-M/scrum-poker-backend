@@ -1,0 +1,4 @@
+module.exports = {
+  ROOM_CONNECT: 'ROOM_CONNECT',
+  STATE_CHANGE: 'STATE_CHANGE',
+};
