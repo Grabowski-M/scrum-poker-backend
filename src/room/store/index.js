@@ -1,5 +1,4 @@
 const { getRoomInitialState, getParticipantInitialState } = require('../helpers');
-const roles = require('../constants/roles');
 
 const createRoomsStore = () => {
   const rooms = {};
@@ -9,10 +8,12 @@ const createRoomsStore = () => {
 
   const getRoom = (roomId) => rooms[roomId];
 
+  const getRoomIdForSocketId = (socketId) => userRoomMap[socketId];
+
   const roomExists = (roomId) => !!rooms[roomId];
 
   const createRoom = ({ roomId, username, socketId }) => {
-    const user = getParticipantInitialState({ username, socketId, role: roles.LEADER });
+    const user = getParticipantInitialState({ username, socketId, leader: socketId });
 
     rooms[roomId] = getRoomInitialState({ roomId, user });
     userRoomMap[socketId] = roomId;
@@ -20,7 +21,7 @@ const createRoomsStore = () => {
 
   const joinRoom = ({ roomId, username, socketId }) => {
     rooms[roomId].participants
-      .push(getParticipantInitialState({ username, socketId, role: roles.PARTICIPANT }));
+      .push(getParticipantInitialState({ username, socketId }));
     userRoomMap[socketId] = roomId;
   };
 
@@ -48,6 +49,7 @@ const createRoomsStore = () => {
     joinRoom,
     roomExists,
     leaveRoom,
+    getRoomIdForSocketId
   };
 };
 

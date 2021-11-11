@@ -1,9 +1,6 @@
-const roles = require('./constants/roles');
-
-const getParticipantInitialState = ({ username, socketId, role = roles.PARTICIPANT }) => ({
+const getParticipantInitialState = ({ username, socketId }) => ({
   socketId,
   username,
-  role,
   card: null,
 });
 
@@ -12,6 +9,7 @@ const getRoomInitialState = ({ roomId, user }) => ({
   showCards: false,
   votingStarted: false,
   participants: [user],
+  leader: user.socketId,
   timer: null,
 });
 
