@@ -3,14 +3,14 @@ const httpServer = require('http').createServer(app);
 const socketIo = require('socket.io');
 
 const {
-  ROOM_CONNECT, STATE_CHANGE, TIMER_CHANGE, TIMER_START,
+  ROOM_CONNECT, STATE_CHANGE, TIMER_CHANGE,
 } = require('./src/room/constants/eventTypes');
 const { createRoomsStore } = require('./src/room/store');
 const { handleRoomConnection } = require('./src/room/repositories');
 
 const options = {
   cors: {
-    origin: 'http://localhost:8081',
+    origin: 'http://localhost:8080',
     methods: ['GET', 'POST'],
   },
 };
@@ -30,11 +30,15 @@ io.on('connection', (socket) => {
   socket.on(TIMER_CHANGE, (payload) => {
     const { time } = payload;
     const roomId = roomsStore.getRoomIdForSocketId(socket.id);
-
-    const now = new Date();
-    const targetTime = new Date(now.getTime() + time * 60 * 1000);
     const roomInStore = roomsStore.getRoom(roomId);
-    roomInStore.timer = targetTime;
+
+    if (time) {
+      const now = new Date();
+
+      roomInStore.targetTime = new Date(now.getTime() + time * 60 * 1000);
+    } else {
+      roomInStore.targetTime = null;
+    }
 
     socket.to(roomId).emit(STATE_CHANGE, roomInStore);
     socket.emit(STATE_CHANGE, roomInStore);

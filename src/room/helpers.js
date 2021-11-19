@@ -10,10 +10,17 @@ const getRoomInitialState = ({ roomId, user }) => ({
   votingStarted: false,
   participants: [user],
   leader: user.socketId,
-  timer: null,
+  targetTime: null,
 });
+
+const isSocketInRoom = ({
+  roomsStore,
+  socket,
+  roomId,
+}) => roomsStore.getRoomIdForSocketId(socket.id) === roomId;
 
 module.exports = {
   getRoomInitialState,
   getParticipantInitialState,
+  isSocketInRoom,
 };
