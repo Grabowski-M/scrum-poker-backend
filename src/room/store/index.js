@@ -8,6 +8,10 @@ const createRoomsStore = () => {
 
   const getRoom = (roomId) => rooms[roomId];
 
+  const setRoom = ({ roomId, newRoomState }) => {
+    rooms[roomId] = newRoomState;
+  };
+
   const getRoomIdForSocketId = (socketId) => userRoomMap[socketId];
 
   const roomExists = (roomId) => !!rooms[roomId];
@@ -35,6 +39,10 @@ const createRoomsStore = () => {
     rooms[roomId].participants = rooms[roomId].participants
       .filter((participant) => participant.socketId !== socketId);
 
+    if (rooms[roomId].leader === socketId && rooms[roomId].participants.length > 0) {
+      rooms[roomId].leader = rooms[roomId].participants[0].socketId;
+    }
+
     if (rooms[roomId].participants.length === 0) {
       rooms[roomId] = null;
     }
@@ -45,11 +53,12 @@ const createRoomsStore = () => {
   return {
     getRooms,
     getRoom,
+    setRoom,
     createRoom,
     joinRoom,
     roomExists,
     leaveRoom,
-    getRoomIdForSocketId
+    getRoomIdForSocketId,
   };
 };
 

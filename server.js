@@ -35,13 +35,25 @@ io.on('connection', (socket) => {
     if (time) {
       const now = new Date();
 
-      roomInStore.targetTime = new Date(now.getTime() + time * 60 * 1000);
+      roomsStore.setRoom({
+        roomId,
+        newRoomState: {
+          ...roomInStore,
+          targetTime: new Date(now.getTime() + time * 60 * 1000),
+        },
+      });
     } else {
-      roomInStore.targetTime = null;
+      roomsStore.setRoom({
+        roomId,
+        newRoomState: {
+          ...roomInStore,
+          targetTime: null,
+        },
+      });
     }
 
-    socket.to(roomId).emit(STATE_CHANGE, roomInStore);
-    socket.emit(STATE_CHANGE, roomInStore);
+    socket.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
+    socket.emit(STATE_CHANGE, roomsStore.getRoom(roomId));
   });
 });
 
