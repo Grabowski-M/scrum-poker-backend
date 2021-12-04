@@ -3,6 +3,7 @@ const { getRoomInitialState, getParticipantInitialState } = require('../helpers'
 const createRoomsStore = () => {
   const rooms = {};
   const userRoomMap = {};
+  const cardsRoomMap = {};
 
   const getRooms = () => rooms;
 
@@ -50,6 +51,28 @@ const createRoomsStore = () => {
     return roomId;
   };
 
+  const changeCard = ({ socketId, card }) => {
+    const roomId = userRoomMap[socketId];
+
+    cardsRoomMap[roomId] = {
+      ...cardsRoomMap[roomId],
+      [socketId]: card,
+    };
+
+    return Object.keys(cardsRoomMap[roomId]).length === rooms[roomId].participants.length;
+  };
+
+  const getRoomCards = (roomId) => cardsRoomMap[roomId];
+
+  const stopRoomVoting = (roomId) => {
+    rooms[roomId].voting = false;
+  };
+
+  const startRoomVoting = (roomId) => {
+    cardsRoomMap[roomId] = {};
+    rooms[roomId].voting = true;
+  };
+
   return {
     getRooms,
     getRoom,
@@ -59,6 +82,10 @@ const createRoomsStore = () => {
     roomExists,
     leaveRoom,
     getRoomIdForSocketId,
+    changeCard,
+    getRoomCards,
+    startRoomVoting,
+    stopRoomVoting,
   };
 };
 

@@ -7,10 +7,11 @@ const getParticipantInitialState = ({ username, socketId }) => ({
 const getRoomInitialState = ({ roomId, user }) => ({
   roomId,
   showCards: false,
-  votingStarted: false,
+  voting: false,
   participants: [user],
   leader: user.socketId,
   targetTime: null,
+  availableCards: [0, 0.5, 1, 2, 3, 5, 8, 13],
 });
 
 const isSocketInRoom = ({
