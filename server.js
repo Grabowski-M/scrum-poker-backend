@@ -3,14 +3,14 @@ const httpServer = require('http').createServer(app);
 const socketIo = require('socket.io');
 
 const {
-  ROOM_CONNECT, STATE_CHANGE, TIMER_CHANGE, CARD_CHANGE, SHOW_CARDS, START_VOTING, STOP_VOTING,
+  ROOM_CONNECT, STATE_CHANGE, TIMER_CHANGE, CARD_CHANGE, SHOW_CARDS, START_VOTING, STOP_VOTING, RESET_CARDS,
 } = require('./src/room/constants/eventTypes');
 const { createRoomsStore } = require('./src/room/store');
 const { handleRoomConnection, handleTimerChange } = require('./src/room/repositories');
 
 const options = {
   cors: {
-    origin: 'http://localhost:8081',
+    origin: 'http://localhost:8080',
     methods: ['GET', 'POST'],
   },
 };
@@ -39,6 +39,7 @@ io.on('connection', (socket) => {
     roomsStore.startRoomVoting(roomId);
 
     socket.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
+    socket.to(roomId).emit(RESET_CARDS);
     socket.emit(STATE_CHANGE, roomsStore.getRoom(roomId));
   });
   socket.on(STOP_VOTING, () => {
