@@ -23,6 +23,8 @@ const options = {
 };
 const io = socketIo(httpServer, options);
 
+app.use('/health', (req, res) => res.send('This is fine'));
+
 const roomsStore = createRoomsStore();
 
 io.on('connection', (socket) => {
