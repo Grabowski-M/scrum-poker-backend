@@ -3,7 +3,8 @@ const { getRoomInitialState, getParticipantInitialState } = require('../helpers'
 const createRoomsStore = () => {
   const rooms = {};
   const userRoomMap = {};
-  const cardsRoomMap = {};
+  const roomCards = {};
+  const users = {};
 
   const getRooms = () => rooms;
 
@@ -19,6 +20,7 @@ const createRoomsStore = () => {
 
   const createRoom = ({ roomId, username, socketId }) => {
     const user = getParticipantInitialState({ username, socketId, leader: socketId });
+    users[socketId] = username;
 
     rooms[roomId] = getRoomInitialState({ roomId, user });
     userRoomMap[socketId] = roomId;
@@ -28,6 +30,7 @@ const createRoomsStore = () => {
     rooms[roomId].participants
       .push(getParticipantInitialState({ username, socketId }));
     userRoomMap[socketId] = roomId;
+    users[socketId] = username;
   };
 
   const leaveRoom = ({ socketId }) => {
@@ -45,7 +48,10 @@ const createRoomsStore = () => {
     }
 
     if (rooms[roomId].participants.length === 0) {
-      rooms[roomId] = null;
+      delete rooms[roomId];
+      delete roomCards[roomId];
+      delete userRoomMap[socketId];
+      delete users[socketId];
     }
 
     return roomId;
@@ -54,22 +60,23 @@ const createRoomsStore = () => {
   const changeCard = ({ socketId, card }) => {
     const roomId = userRoomMap[socketId];
 
-    cardsRoomMap[roomId] = {
-      ...cardsRoomMap[roomId],
+    roomCards[roomId] = {
+      ...roomCards[roomId],
       [socketId]: card,
     };
-
-    return Object.keys(cardsRoomMap[roomId]).length === rooms[roomId].participants.length;
   };
 
-  const getRoomCards = (roomId) => cardsRoomMap[roomId];
+  const shouldShowCards = ({ roomId }) => Object.keys(roomCards[roomId]).length
+    === rooms[roomId].participants.length;
+
+  const getRoomCards = (roomId) => roomCards[roomId];
 
   const stopRoomVoting = (roomId) => {
     rooms[roomId].voting = false;
   };
 
   const startRoomVoting = (roomId) => {
-    cardsRoomMap[roomId] = {};
+    roomCards[roomId] = {};
     rooms[roomId].voting = true;
   };
 
@@ -86,6 +93,7 @@ const createRoomsStore = () => {
     getRoomCards,
     startRoomVoting,
     stopRoomVoting,
+    shouldShowCards,
   };
 };
 

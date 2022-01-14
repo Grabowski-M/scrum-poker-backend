@@ -1,7 +1,6 @@
 const getParticipantInitialState = ({ username, socketId }) => ({
   socketId,
   username,
-  card: null,
 });
 
 const getRoomInitialState = ({ roomId, user }) => ({

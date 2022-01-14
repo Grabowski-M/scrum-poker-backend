@@ -3,7 +3,14 @@ const httpServer = require('http').createServer(app);
 const socketIo = require('socket.io');
 
 const {
-  ROOM_CONNECT, STATE_CHANGE, TIMER_CHANGE, CARD_CHANGE, SHOW_CARDS, START_VOTING, STOP_VOTING, RESET_CARDS,
+  ROOM_CONNECT,
+  STATE_CHANGE,
+  TIMER_CHANGE,
+  CARD_CHANGE,
+  SHOW_CARDS,
+  START_VOTING,
+  STOP_VOTING,
+  RESET_CARDS,
 } = require('./src/room/constants/eventTypes');
 const { createRoomsStore } = require('./src/room/store');
 const { handleRoomConnection, handleTimerChange } = require('./src/room/repositories');
@@ -24,9 +31,9 @@ io.on('connection', (socket) => {
   socket.on(CARD_CHANGE, (payload) => {
     const roomId = roomsStore.getRoomIdForSocketId(socket.id);
     const { card } = payload;
-    const shouldShowCards = roomsStore.changeCard({ socketId: socket.id, card });
+    roomsStore.changeCard({ socketId: socket.id, card });
 
-    if (shouldShowCards) {
+    if (roomsStore.shouldShowCards({ roomId })) {
       socket.to(roomId).emit(SHOW_CARDS, roomsStore.getRoomCards(roomId));
       socket.emit(SHOW_CARDS, roomsStore.getRoomCards(roomId));
       roomsStore.stopRoomVoting(roomId);
@@ -44,8 +51,10 @@ io.on('connection', (socket) => {
   });
   socket.on(STOP_VOTING, () => {
     const roomId = roomsStore.getRoomIdForSocketId(socket.id);
-    roomsStore.stopRoomVoting(roomId);
 
+    socket.to(roomId).emit(SHOW_CARDS, roomsStore.getRoomCards(roomId));
+    socket.emit(SHOW_CARDS, roomsStore.getRoomCards(roomId));
+    roomsStore.stopRoomVoting(roomId);
     socket.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
     socket.emit(STATE_CHANGE, roomsStore.getRoom(roomId));
   });
