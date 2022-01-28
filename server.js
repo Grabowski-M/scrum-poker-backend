@@ -17,7 +17,7 @@ const { handleRoomConnection, handleTimerChange } = require('./src/room/reposito
 
 const options = {
   cors: {
-    origin: ['http://localhost:8080', 'scrum-poker.tech'],
+    origin: ['http://localhost:8080', 'game.scrum-poker.tech'],
     methods: ['GET', 'POST'],
   },
 };
