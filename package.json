@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "DEBUG=socket.io:server nodemon server.js"
   },
   "devDependencies": {
     "eslint": "^7.32.0",

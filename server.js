@@ -11,9 +11,15 @@ const {
   START_VOTING,
   STOP_VOTING,
   RESET_CARDS,
+  PROMOTE_TO_LEADER,
 } = require('./src/room/constants/eventTypes');
 const { createRoomsStore } = require('./src/room/store');
-const { handleRoomConnection, handleTimerChange } = require('./src/room/repositories');
+const {
+  handleRoomConnection,
+  handleTimerChange,
+  handleCardChange,
+  handlePromoteToLeader,
+} = require('./src/room/repositories');
 
 const options = {
   cors: {
@@ -28,43 +34,34 @@ app.use('/health', (req, res) => res.send('This is fine'));
 const roomsStore = createRoomsStore();
 
 io.on('connection', (socket) => {
-  socket.on(ROOM_CONNECT, (payload) => handleRoomConnection({ roomsStore })({ socket, payload }));
-  socket.on(TIMER_CHANGE, (payload) => handleTimerChange({ roomsStore })({ socket, payload }));
-  socket.on(CARD_CHANGE, (payload) => {
-    const roomId = roomsStore.getRoomIdForSocketId(socket.id);
-    const { card } = payload;
-    roomsStore.changeCard({ socketId: socket.id, card });
-
-    if (roomsStore.shouldShowCards({ roomId })) {
-      socket.to(roomId).emit(SHOW_CARDS, roomsStore.getRoomCards(roomId));
-      socket.emit(SHOW_CARDS, roomsStore.getRoomCards(roomId));
-      roomsStore.stopRoomVoting(roomId);
-      socket.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
-      socket.emit(STATE_CHANGE, roomsStore.getRoom(roomId));
-    }
-  });
+  socket.on(ROOM_CONNECT, (payload) => handleRoomConnection({ roomsStore, io })({
+    socket, payload,
+  }));
+  socket.on(TIMER_CHANGE, (payload) => handleTimerChange({ roomsStore, io })({ socket, payload }));
+  socket.on(CARD_CHANGE, (payload) => handleCardChange({ roomsStore, io })({ socket, payload }));
+  socket.on(PROMOTE_TO_LEADER, (payload) => handlePromoteToLeader({ roomsStore, io })({
+    socket, payload,
+  }));
   socket.on(START_VOTING, () => {
     const roomId = roomsStore.getRoomIdForSocketId(socket.id);
     roomsStore.startRoomVoting(roomId);
 
-    socket.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
-    socket.to(roomId).emit(RESET_CARDS);
-    socket.emit(STATE_CHANGE, roomsStore.getRoom(roomId));
+    io.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
+    io.to(roomId).emit(RESET_CARDS);
+    io.emit(STATE_CHANGE, roomsStore.getRoom(roomId));
   });
   socket.on(STOP_VOTING, () => {
     const roomId = roomsStore.getRoomIdForSocketId(socket.id);
 
-    socket.to(roomId).emit(SHOW_CARDS, roomsStore.getRoomCards(roomId));
-    socket.emit(SHOW_CARDS, roomsStore.getRoomCards(roomId));
+    io.to(roomId).emit(SHOW_CARDS, roomsStore.getRoomCards(roomId));
     roomsStore.stopRoomVoting(roomId);
-    socket.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
-    socket.emit(STATE_CHANGE, roomsStore.getRoom(roomId));
+    io.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
   });
   socket.on('disconnect', () => {
     const roomId = roomsStore.leaveRoom({ socketId: socket.id });
 
     if (roomId) {
-      socket.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
+      io.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
     }
   });
 });

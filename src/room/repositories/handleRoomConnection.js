@@ -2,7 +2,7 @@ const socketUtilities = require('../socketUtilities');
 const { isSocketInRoom } = require('../helpers');
 const { STATE_CHANGE } = require('../constants/eventTypes');
 
-module.exports = ({ roomsStore }) => ({ socket, payload }) => {
+module.exports = ({ io, roomsStore }) => ({ socket, payload }) => {
   const { roomId, username } = payload;
 
   if (isSocketInRoom({ roomsStore, socket, roomId })) {
@@ -12,9 +12,13 @@ module.exports = ({ roomsStore }) => ({ socket, payload }) => {
 
   if (roomsStore.roomExists(roomId)) {
     roomsStore.joinRoom({ roomId, username, socketId: socket.id });
-    socketUtilities.joinRoom({ socket, roomId, roomInStore: roomsStore.getRoom(roomId) });
+    socketUtilities.joinRoom({
+      io, socket, roomId, roomInStore: roomsStore.getRoom(roomId),
+    });
   } else {
     roomsStore.createRoom({ roomId, username, socketId: socket.id });
-    socketUtilities.joinRoom({ socket, roomId, roomInStore: roomsStore.getRoom(roomId) });
+    socketUtilities.joinRoom({
+      io, socket, roomId, roomInStore: roomsStore.getRoom(roomId),
+    });
   }
 };

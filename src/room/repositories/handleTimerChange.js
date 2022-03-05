@@ -1,6 +1,6 @@
 const { STATE_CHANGE } = require('../constants/eventTypes');
 
-module.exports = ({ roomsStore }) => ({ socket, payload }) => {
+module.exports = ({ io, roomsStore }) => ({ socket, payload }) => {
   const { time } = payload;
   const roomId = roomsStore.getRoomIdForSocketId(socket.id);
   const roomInStore = roomsStore.getRoom(roomId);
@@ -25,6 +25,5 @@ module.exports = ({ roomsStore }) => ({ socket, payload }) => {
     });
   }
 
-  socket.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
-  socket.emit(STATE_CHANGE, roomsStore.getRoom(roomId));
+  io.to(roomId).emit(STATE_CHANGE, roomsStore.getRoom(roomId));
 };

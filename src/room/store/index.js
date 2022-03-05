@@ -80,6 +80,10 @@ const createRoomsStore = () => {
     rooms[roomId].voting = true;
   };
 
+  const changeLeader = ({ roomId, participantId }) => {
+    rooms[roomId].leader = participantId;
+  };
+
   return {
     getRooms,
     getRoom,
@@ -94,6 +98,7 @@ const createRoomsStore = () => {
     startRoomVoting,
     stopRoomVoting,
     shouldShowCards,
+    changeLeader,
   };
 };
 
