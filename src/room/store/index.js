@@ -71,6 +71,8 @@ const createRoomsStore = () => {
 
   const getRoomCards = (roomId) => roomCards[roomId];
 
+  const setRoomCards = ({ roomId, newCards }) => { roomCards[roomId] = newCards; };
+
   const stopRoomVoting = (roomId) => {
     rooms[roomId].voting = false;
   };
@@ -95,6 +97,7 @@ const createRoomsStore = () => {
     getRoomIdForSocketId,
     changeCard,
     getRoomCards,
+    setRoomCards,
     startRoomVoting,
     stopRoomVoting,
     shouldShowCards,
