@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 const getParticipantInitialState = ({ username, socketId }) => ({
   socketId,
   username,

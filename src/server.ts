@@ -1,20 +1,21 @@
-const app = require('express')();
-const cors = require('cors');
+// eslint-disable-next-line
+// @ts-nocheck
 
-app.use(cors());
-const httpServer = require('http').createServer(app);
-const socketIo = require('socket.io');
+import express from 'express';
+import cors from 'cors';
+import http from 'http';
+import socketIo from 'socket.io';
 
-const {
+import {
   ROOM_CONNECT,
   TIMER_CHANGE,
   CARD_CHANGE,
   START_VOTING,
   STOP_VOTING,
   PROMOTE_TO_LEADER,
-} = require('./src/room/constants/eventTypes');
-const { createRoomsStore } = require('./src/room/store');
-const {
+} from './room/constants/eventTypes';
+import { createRoomsStore } from './room/store';
+import {
   handleRoomConnection,
   handleTimerChange,
   handleCardChange,
@@ -22,7 +23,12 @@ const {
   handleStartVoting,
   handleStopVoting,
   handleDisconnect,
-} = require('./src/room/repositories');
+} from './room/repositories';
+
+const app = express();
+
+app.use(cors());
+const httpServer = http.createServer(app);
 
 const options = {
   cors: {
