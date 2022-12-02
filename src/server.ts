@@ -32,7 +32,7 @@ const httpServer = http.createServer(app);
 
 const options = {
   cors: {
-    origin: ['http://localhost:8080', 'https://game.scrum-poker.tech'],
+    origin: ['http://localhost:8080', 'https://scrumpoker.michal-grabowski.com'],
     methods: ['GET', 'POST'],
   },
 };
