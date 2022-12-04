@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+// @ts-nocheck
 import { eventTypes } from '../constants/eventTypes';
 
 const MAX_VOTE_VALUE = 999;
@@ -40,7 +42,7 @@ export const handleStopVoting = ({ io, roomsStore }) =>
   ({ socket }) => {
     const roomId = roomsStore.getRoomIdForSocketId(socket.id);
 
-    roomsStore.setRoomCards({
+    roomsStore.setRoomsCards({
       roomId,
       newCards: getCardsWithDeviation(roomsStore.getRoomCards(roomId)),
     });

@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+// @ts-nocheck
 import { handleStopVoting } from './handleStopVoting';
 
 export const handleCardChange = ({ io, roomsStore }) =>

@@ -1,8 +1,8 @@
 import { eventTypes } from '../room/constants/eventTypes';
-import { RoomState } from './room';
+import { Room } from './room';
 
 export interface ServerToClientEvents {
-  [eventTypes.STATE_CHANGE]: (roomState: RoomState) => {};
+  [eventTypes.STATE_CHANGE]: (roomState: Room) => any;
 }
 
 export interface ClientToServerEvents {
@@ -19,6 +19,4 @@ export interface ClientToServerEvents {
   [eventTypes.STATE_CHANGE]: () => void;
 }
 
-export interface SocketData {
-
-}
+export type SocketData = any

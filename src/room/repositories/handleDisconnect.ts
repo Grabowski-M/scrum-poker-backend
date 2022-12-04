@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+// @ts-nocheck
 import { eventTypes } from '../constants/eventTypes';
 
 export const handleDisconnect = ({ io, roomsStore }) =>

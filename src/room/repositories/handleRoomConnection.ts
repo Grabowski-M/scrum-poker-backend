@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+// @ts-nocheck
 import { joinRoom } from '../socketUtilities/joinRoom';
 import { isSocketInRoom } from '../helpers';
 import { eventTypes } from '../constants/eventTypes';

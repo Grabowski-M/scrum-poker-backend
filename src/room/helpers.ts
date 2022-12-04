@@ -1,4 +1,4 @@
-import { RoomStore, User } from '../types/room';
+import { Participant, RoomStore } from '../types/room';
 import { Socket } from 'socket.io';
 
 const getParticipantInitialState = ({
@@ -14,16 +14,16 @@ const getParticipantInitialState = ({
 
 const getRoomInitialState = ({
   roomId,
-  user,
+  participant,
 }: {
   roomId: string;
-  user: User;
+  participant: Participant;
 }) => ({
   roomId,
   showCards: false,
   voting: false,
-  participants: [user],
-  leader: user.socketId,
+  participants: [participant],
+  leader: participant.socketId,
   targetTime: null,
   availableCards: [0, 0.5, 1, 2, 3, 5, 8, 13],
 });

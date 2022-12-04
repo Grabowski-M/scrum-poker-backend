@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+// @ts-nocheck
 import express from 'express';
 import cors from 'cors';
 import http from 'http';
