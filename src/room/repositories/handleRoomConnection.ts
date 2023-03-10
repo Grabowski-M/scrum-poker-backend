@@ -1,12 +1,14 @@
-// eslint-disable-next-line
-// @ts-nocheck
+import { Socket } from 'socket.io';
+
 import { joinRoom } from '../socketUtilities/joinRoom';
 import { isSocketInRoom } from '../helpers';
 import { eventTypes } from '../constants/eventTypes';
+import { RoomStore } from '../../types/room';
+import { IoType } from '../../types/events';
 
 export const handleRoomConnection =
-  ({ io, roomsStore }) =>
-  ({ socket, payload }) => {
+  ({ io, roomsStore }: { io: IoType, roomsStore: RoomStore }) =>
+  ({ socket, payload }: { socket: Socket, payload: { roomId: string, username: string } }) => {
     const { roomId, username } = payload;
 
     if (isSocketInRoom({ roomsStore, socket, roomId })) {
@@ -17,6 +19,7 @@ export const handleRoomConnection =
     if (roomsStore.roomExists(roomId)) {
       roomsStore.joinRoom({ roomId, username, socketId: socket.id });
       joinRoom({
+        username,
         io,
         socket,
         roomId,
@@ -25,6 +28,7 @@ export const handleRoomConnection =
     } else {
       roomsStore.createRoom({ roomId, username, socketId: socket.id });
       joinRoom({
+        username,
         io,
         socket,
         roomId,

@@ -1,8 +1,11 @@
+import { Socket } from 'socket.io';
 import { eventTypes } from '../room/constants/eventTypes';
-import { Room } from './room';
+import { Room, RoomCards } from './room';
 
 export interface ServerToClientEvents {
   [eventTypes.STATE_CHANGE]: (roomState: Room) => any;
+  [eventTypes.RESET_CARDS]: () => void;
+  [eventTypes.SHOW_CARDS]: (roomCards: RoomCards) => void;
 }
 
 export interface ClientToServerEvents {
@@ -17,6 +20,13 @@ export interface ClientToServerEvents {
   [eventTypes.STOP_VOTING]: () => void;
   [eventTypes.DISCONNECT]: () => void;
   [eventTypes.STATE_CHANGE]: () => void;
+  [eventTypes.RESET_CARDS]: () => void;
 }
+
+export type IoType = Socket< 
+        ClientToServerEvents,
+        ServerToClientEvents,
+        SocketData
+    >
 
 export type SocketData = any

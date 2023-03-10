@@ -1,9 +1,11 @@
-// eslint-disable-next-line
-// @ts-nocheck
+import { Server, Socket } from 'socket.io';
+import { IoType } from '../../types/events';
+import { RoomStore } from '../../types/room';
+
 import { eventTypes } from '../constants/eventTypes';
 
-export const handleDisconnect = ({ io, roomsStore }) =>
-  ({ socket }) => {
+export const handleDisconnect = ({ io, roomsStore }: { io: IoType, roomsStore: RoomStore }) =>
+  ({ socket }: { socket: Socket }) => {
     const roomId = roomsStore.leaveRoom({ socketId: socket.id });
 
     if (roomId) {

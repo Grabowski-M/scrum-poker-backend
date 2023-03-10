@@ -1,17 +1,18 @@
-// eslint-disable-next-line
-// @ts-nocheck
+import { Socket } from 'socket.io';
+import { IoType } from '../../types/events';
+import { RoomCards, RoomStore } from '../../types/room';
 import { eventTypes } from '../constants/eventTypes';
 
 const MAX_VOTE_VALUE = 999;
 
-const getAverage = (cards = {}) => {
+const getAverage = (cards = {} as {[Key: string]: number}): number => {
   const keys = Object.keys(cards);
   const sum = keys.reduce((acc, currKey) => acc + Number(cards[currKey]), 0);
 
   return keys.length > 0 ? sum / keys.length : 0;
 };
 
-const findClosestToAverage = (cards = {}, average) =>
+const findClosestToAverage = (cards = {} as {[Key: string]: number}, average: number): number =>
   Object.keys(cards).reduce(
     (acc, currKey) =>
       Math.abs(cards[currKey] - average) < Math.abs(acc - average)
@@ -20,7 +21,7 @@ const findClosestToAverage = (cards = {}, average) =>
     MAX_VOTE_VALUE
   );
 
-const getCardsWithDeviation = (cards = {}) => {
+const getCardsWithDeviation = (cards = {} as {[Key: string]: number}) => {
   const average = getAverage(cards);
   const closestToAverage = findClosestToAverage(cards, average);
 
@@ -38,8 +39,8 @@ const getCardsWithDeviation = (cards = {}) => {
   }, {});
 };
 
-export const handleStopVoting = ({ io, roomsStore }) =>
-  ({ socket }) => {
+export const handleStopVoting = ({ io, roomsStore }: { io: IoType, roomsStore: RoomStore }) =>
+  ({ socket }: { socket: Socket }) => {
     const roomId = roomsStore.getRoomIdForSocketId(socket.id);
 
     roomsStore.setRoomsCards({
