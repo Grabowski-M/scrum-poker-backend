@@ -5,6 +5,7 @@ import { handlePromoteToLeader } from './handlePromoteToLeader';
 import { handleStartVoting } from './handleStartVoting';
 import { handleStopVoting } from './handleStopVoting';
 import { handleDisconnect } from './handleDisconnect';
+import { handleRemoveParticipant } from './handleRemoveParticipant';
 
 export {
   handleRoomConnection,
@@ -14,4 +15,5 @@ export {
   handleStartVoting,
   handleStopVoting,
   handleDisconnect,
+  handleRemoveParticipant,
 };

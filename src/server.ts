@@ -15,6 +15,7 @@ import {
   handleStartVoting,
   handleStopVoting,
   handleTimerChange,
+  handleRemoveParticipant,
 } from './room/repositories';
 
 import {
@@ -59,6 +60,9 @@ io.on('connection', (socket) => {
   );
   socket.on(eventTypes.PROMOTE_TO_LEADER, (payload) =>
     handlePromoteToLeader({ roomsStore, io })({ socket, payload })
+  );
+  socket.on(eventTypes.REMOVE_PARTICIPANT, (payload) =>
+    handleRemoveParticipant({ roomsStore, io })({ socket, payload })
   );
   socket.on(eventTypes.START_VOTING, () =>
     handleStartVoting({ roomsStore, io })({ socket })

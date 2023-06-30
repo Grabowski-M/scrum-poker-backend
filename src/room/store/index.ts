@@ -55,6 +55,26 @@ const createRoomsStore: () => RoomStore = () => {
     users[socketId] = username;
   };
 
+  const removeParticipant = ({ participantId }: { participantId: string }) => {
+    const roomId = userRoomMap[participantId];
+
+    if (!roomId) {
+      return '';
+    }
+
+    rooms[roomId].participants = rooms[roomId].participants.filter(
+      (participant: Participant) => participant.socketId !== participantId
+    );
+
+    delete userRoomMap[participantId];
+    delete users[participantId];
+    delete roomsCards[roomId][participantId];
+
+    console.log(roomsCards[roomId]);
+
+    return roomId;
+  };
+
   const leaveRoom = ({ socketId }: { socketId: string }) => {
     const roomId = userRoomMap[socketId];
 
@@ -148,6 +168,7 @@ const createRoomsStore: () => RoomStore = () => {
     stopRoomVoting,
     shouldShowCards,
     changeLeader,
+    removeParticipant,
   };
 };
 

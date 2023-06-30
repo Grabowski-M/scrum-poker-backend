@@ -47,6 +47,7 @@ type RoomStore = {
     username: string;
     socketId: string;
   }) => void;
+  removeParticipant: ({ participantId }: { participantId: string }) => string;
 };
 
 interface Participant {
