@@ -23,10 +23,10 @@ export interface ClientToServerEvents {
   [eventTypes.RESET_CARDS]: () => void;
 }
 
-export type IoType = Socket< 
-        ClientToServerEvents,
-        ServerToClientEvents,
-        SocketData
-    >
+export type IoType = Socket<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  SocketData
+>;
 
-export type SocketData = any
+export type SocketData = any;

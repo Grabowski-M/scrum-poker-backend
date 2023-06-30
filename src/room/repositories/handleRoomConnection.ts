@@ -7,8 +7,14 @@ import { RoomStore } from '../../types/room';
 import { IoType } from '../../types/events';
 
 export const handleRoomConnection =
-  ({ io, roomsStore }: { io: IoType, roomsStore: RoomStore }) =>
-  ({ socket, payload }: { socket: Socket, payload: { roomId: string, username: string } }) => {
+  ({ io, roomsStore }: { io: IoType; roomsStore: RoomStore }) =>
+  ({
+    socket,
+    payload,
+  }: {
+    socket: Socket;
+    payload: { roomId: string; username: string };
+  }) => {
     const { roomId, username } = payload;
 
     if (isSocketInRoom({ roomsStore, socket, roomId })) {

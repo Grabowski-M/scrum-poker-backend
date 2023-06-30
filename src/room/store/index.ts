@@ -9,7 +9,13 @@ const createRoomsStore: () => RoomStore = () => {
 
   const getRoom = (roomId: string) => rooms[roomId];
 
-  const setRoom = ({ roomId, newRoomState }: { roomId: string; newRoomState: Room }) => {
+  const setRoom = ({
+    roomId,
+    newRoomState,
+  }: {
+    roomId: string;
+    newRoomState: Room;
+  }) => {
     rooms[roomId] = newRoomState;
   };
 
@@ -17,7 +23,15 @@ const createRoomsStore: () => RoomStore = () => {
 
   const roomExists = (roomId: string) => !!rooms[roomId];
 
-  const createRoom = ({ roomId, username, socketId }: { roomId: string; username: string; socketId: string }) => {
+  const createRoom = ({
+    roomId,
+    username,
+    socketId,
+  }: {
+    roomId: string;
+    username: string;
+    socketId: string;
+  }) => {
     const participant = getParticipantInitialState({ username, socketId });
     users[socketId] = username;
 
@@ -25,9 +39,18 @@ const createRoomsStore: () => RoomStore = () => {
     userRoomMap[socketId] = roomId;
   };
 
-  const joinRoom = ({ roomId, username, socketId }: { roomId: string; username: string; socketId: string }) => {
-    rooms[roomId].participants
-                 .push(getParticipantInitialState({ username, socketId }));
+  const joinRoom = ({
+    roomId,
+    username,
+    socketId,
+  }: {
+    roomId: string;
+    username: string;
+    socketId: string;
+  }) => {
+    rooms[roomId].participants.push(
+      getParticipantInitialState({ username, socketId })
+    );
     userRoomMap[socketId] = roomId;
     users[socketId] = username;
   };
@@ -39,10 +62,14 @@ const createRoomsStore: () => RoomStore = () => {
       return '';
     }
 
-    rooms[roomId].participants = rooms[roomId].participants
-                                              .filter((participant: Participant) => participant.socketId !== socketId);
+    rooms[roomId].participants = rooms[roomId].participants.filter(
+      (participant: Participant) => participant.socketId !== socketId
+    );
 
-    if (rooms[roomId].leader === socketId && rooms[roomId].participants.length > 0) {
+    if (
+      rooms[roomId].leader === socketId &&
+      rooms[roomId].participants.length > 0
+    ) {
       rooms[roomId].leader = rooms[roomId].participants[0].socketId;
     }
 
@@ -56,7 +83,13 @@ const createRoomsStore: () => RoomStore = () => {
     return roomId;
   };
 
-  const changeCard = ({ socketId, card }: { socketId: string, card: number }) => {
+  const changeCard = ({
+    socketId,
+    card,
+  }: {
+    socketId: string;
+    card: number;
+  }) => {
     const roomId = userRoomMap[socketId];
 
     roomsCards[roomId] = {
@@ -65,12 +98,19 @@ const createRoomsStore: () => RoomStore = () => {
     };
   };
 
-  const shouldShowCards = ({ roomId }: { roomId: string }) => Object.keys(roomsCards[roomId]).length
-    === rooms[roomId].participants.length;
+  const shouldShowCards = ({ roomId }: { roomId: string }) =>
+    Object.keys(roomsCards[roomId]).length ===
+    rooms[roomId].participants.length;
 
   const getRoomCards = (roomId: string) => roomsCards[roomId];
 
-  const setRoomsCards = ({ roomId, newCards }: { roomId: string; newCards: RoomCards }) => {
+  const setRoomsCards = ({
+    roomId,
+    newCards,
+  }: {
+    roomId: string;
+    newCards: RoomCards;
+  }) => {
     roomsCards[roomId] = newCards;
   };
 
@@ -83,7 +123,13 @@ const createRoomsStore: () => RoomStore = () => {
     rooms[roomId].voting = true;
   };
 
-  const changeLeader = ({ roomId, participantId }: { roomId: string; participantId: string }) => {
+  const changeLeader = ({
+    roomId,
+    participantId,
+  }: {
+    roomId: string;
+    participantId: string;
+  }) => {
     rooms[roomId].leader = participantId;
   };
 

@@ -17,7 +17,11 @@ import {
   handleTimerChange,
 } from './room/repositories';
 
-import { ClientToServerEvents, ServerToClientEvents, SocketData } from './types/events';
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+  SocketData,
+} from './types/events';
 
 const app = express();
 
@@ -26,7 +30,10 @@ const httpServer = http.createServer(app);
 
 const options = {
   cors: {
-    origin: ['http://localhost:8080', 'https://scrumpoker.michal-grabowski.com'],
+    origin: [
+      'http://localhost:8080',
+      'https://scrumpoker.michal-grabowski.com',
+    ],
     methods: ['GET', 'POST'],
   },
 };

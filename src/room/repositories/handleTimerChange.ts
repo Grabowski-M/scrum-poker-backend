@@ -2,7 +2,8 @@
 // @ts-nocheck
 import { eventTypes } from '../constants/eventTypes';
 
-export const handleTimerChange = ({ io, roomsStore }) =>
+export const handleTimerChange =
+  ({ io, roomsStore }) =>
   ({ socket, payload }) => {
     const { time } = payload;
     const roomId = roomsStore.getRoomIdForSocketId(socket.id);
