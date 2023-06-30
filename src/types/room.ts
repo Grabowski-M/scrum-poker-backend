@@ -63,6 +63,7 @@ interface Room {
   leader: string;
   targetTime: null | Date;
   availableCards: number[];
+  progress: number;
 }
 
 type RoomCards = { [Key: string]: number };

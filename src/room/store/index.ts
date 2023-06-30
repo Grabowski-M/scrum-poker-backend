@@ -120,6 +120,8 @@ const createRoomsStore: () => RoomStore = () => {
         [socketId]: card,
       };
     }
+    console.log(roomsCards[roomId]);
+    rooms[roomId].progress = Object.keys(roomsCards[roomId]).length;
   };
 
   const shouldShowCards = ({ roomId }: { roomId: string }) =>
@@ -140,11 +142,13 @@ const createRoomsStore: () => RoomStore = () => {
 
   const stopRoomVoting = (roomId: string) => {
     rooms[roomId].voting = false;
+    rooms[roomId].progress = rooms[roomId].participants.length;
   };
 
   const startRoomVoting = (roomId: string) => {
     roomsCards[roomId] = {};
     rooms[roomId].voting = true;
+    rooms[roomId].progress = 0;
   };
 
   const changeLeader = ({

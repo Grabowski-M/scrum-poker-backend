@@ -26,6 +26,7 @@ const getRoomInitialState = ({
   leader: participant.socketId,
   targetTime: null,
   availableCards: [0, 0.5, 1, 2, 3, 5, 8, 13],
+  progress: 0,
 });
 
 const isSocketInRoom = ({
