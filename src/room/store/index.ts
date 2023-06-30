@@ -112,10 +112,14 @@ const createRoomsStore: () => RoomStore = () => {
   }) => {
     const roomId = userRoomMap[socketId];
 
-    roomsCards[roomId] = {
-      ...roomsCards[roomId],
-      [socketId]: card,
-    };
+    if (roomsCards[roomId][socketId] === card) {
+      delete roomsCards[roomId][socketId];
+    } else {
+      roomsCards[roomId] = {
+        ...roomsCards[roomId],
+        [socketId]: card,
+      };
+    }
   };
 
   const shouldShowCards = ({ roomId }: { roomId: string }) =>
