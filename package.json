@@ -7,8 +7,7 @@
     "start": "ts-node src/server.ts",
     "dev": "DEBUG=socket.io:server nodemon src/server.ts",
     "prettier:check": "prettier --check .",
-    "prettier:fix": "prettier --write .",
-    "prepare": "husky install"
+    "prettier:fix": "prettier --write ."
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.2",
